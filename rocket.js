@@ -30,7 +30,7 @@ function Rocket(dna) {
       this.vel.add(this.acc);
       this.position.add(this.vel);
       this.acc.mult(0);
-      this.vel.limit(7);
+      this.vel.limit(8);
       this.time++;
     }
     if (this.crashed) {
@@ -63,7 +63,7 @@ function Rocket(dna) {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
     this.fitness = 1 / d;
     if (this.completed) {
-      this.fitness *= 20 * (50 / this.time);
+      this.fitness *= 20 * (200 / this.time);
     }
     if (this.crashed) {
       this.fitness = this.fitness / 10;

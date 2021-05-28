@@ -1,4 +1,5 @@
 function DNA(genes) {
+  this.mutationRate = 0.002;
   if (genes) {
     this.genes = genes;
   } else {
@@ -23,9 +24,9 @@ function DNA(genes) {
 
   this.mutation = function () {
     for (var i = 0; i < this.genes.length; i++) {
-      if (random(1) < 0.01) {
+      if (random(1) < this.mutationRate) {
         this.genes[i] = p5.Vector.random2D();
-        this.genes[i].setMag(0.1);
+        this.genes[i].setMag(0.2);
       }
     }
   };
