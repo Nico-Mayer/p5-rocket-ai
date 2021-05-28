@@ -18,13 +18,22 @@ function Rocket(dna) {
   this.update = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
     this.addForce(this.dna.genes[count]);
-    if (d < 5) {
+    if (d < 10) {
       this.completed = true;
     }
     if (!this.completed) {
       this.vel.add(this.acc);
       this.position.add(this.vel);
       this.acc.mult(0);
+    }
+
+    if (
+      this.position.x > rx &&
+      this.position.x < rx + rw &&
+      this.position.y > ry &&
+      this.position.y < ry + rh
+    ) {
+      this.completed = true;
     }
   };
 

@@ -1,5 +1,5 @@
 function Population() {
-  this.size = 1000;
+  this.size = 800;
   this.rockets = [];
   this.matingpool = [];
 
@@ -35,6 +35,7 @@ function Population() {
       var parentA = random(this.matingpool).dna;
       var parentB = random(this.matingpool).dna;
       var child = parentA.crossover(parentB);
+      child.mutation();
       newrockets[i] = new Rocket(child);
     }
     this.rockets = newrockets;
