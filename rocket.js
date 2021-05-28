@@ -46,6 +46,10 @@ function Rocket(dna) {
 
   this.render = function () {
     push();
+    var d = dist(this.position.x, this.position.y, target.x, target.y);
+    fill(255);
+    textSize(14);
+    text(floor(d), this.position.x, this.position.y - 10);
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
@@ -66,14 +70,12 @@ function Rocket(dna) {
     }
   };
   this.checkForCrash = function () {
-    if (
-      this.position.x > rx &&
-      this.position.x < rx + rw &&
-      this.position.y > ry &&
-      this.position.y < ry + rh
-    ) {
-      this.crashed = true;
+    for (i = 0; i < obstacles.length; i++) {
+      if (obstacles[i].checkCollision(this.position.x, this.position.y)) {
+        this.crashed = true;
+      }
     }
+
     if (
       this.position.x < 0 ||
       this.position.x > windowWidth ||
