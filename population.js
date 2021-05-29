@@ -1,5 +1,5 @@
 function Population() {
-  this.size = 350;
+  this.size = 150;
   this.rockets = [];
   this.matingpool = [];
 

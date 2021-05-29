@@ -10,6 +10,7 @@ function Rocket(dna) {
   this.crashed = false;
   this.time = 0;
   this.alive = true;
+  this.trail = [];
 
   if (dna) {
     this.dna = dna;
@@ -39,6 +40,11 @@ function Rocket(dna) {
         this.alive = false;
       }
     }
+    var v = createVector(this.position.x, this.position.y);
+    this.trail.push(v);
+    if (this.trail.length > 60) {
+      this.trail.splice(0, 1);
+    }
 
     this.checkForCrash();
     this.addForce(this.dna.genes[count]);
@@ -48,14 +54,16 @@ function Rocket(dna) {
     push();
     var d = dist(this.position.x, this.position.y, target.x, target.y);
     fill(255);
-    textSize(14);
+    textSize(18);
     text(floor(d), this.position.x, this.position.y - 10);
+    this.renderTrail();
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
     fill(this.red, this.green, this.blue, 150);
     rectMode(CENTER);
     rect(0, 0, 27, 7);
+
     pop();
   };
 
@@ -75,7 +83,7 @@ function Rocket(dna) {
         this.crashed = true;
       }
     }
-
+    // Check for Wall Crash
     if (
       this.position.x < 0 ||
       this.position.x > windowWidth ||
@@ -84,5 +92,17 @@ function Rocket(dna) {
     ) {
       this.crashed = true;
     }
+  };
+
+  this.renderTrail = function () {
+    stroke(this.red, this.green, this.blue, 80);
+    beginShape();
+    noFill();
+    strokeWeight(3);
+    for (var i = 0; i < this.trail.length; i++) {
+      var v = this.trail[i];
+      vertex(v.x, v.y);
+    }
+    endShape();
   };
 }

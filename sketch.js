@@ -9,9 +9,14 @@ let genTracker;
 let crashedTracker;
 let traget;
 let obstacles;
+//let distanceBtn;
+let trailBtn;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  let distanceBtn = createButton("Show Distance");
+  distanceBtn.position(30, 130);
+  distanceBtn.mousePressed();
   obstacles = [];
   obstacles[0] = new Obstacle(
     "RECT",
@@ -74,6 +79,7 @@ function setupInfos() {
   crashedTracker = createP();
   crashedTracker.position(30, 85);
 }
+
 function renderInfos() {
   genTracker.html("Generation: " + generation);
   lifespanTracker.html("Lifespan: " + count + "/" + lifespan);
