@@ -2,9 +2,6 @@ function Rocket(dna) {
   this.position = createVector(windowWidth / 2, windowHeight - 20);
   this.vel = createVector();
   this.acc = createVector();
-  this.red = random(255);
-  this.green = random(255);
-  this.blue = random(255);
   this.fitness = 0;
   this.completed = false;
   this.crashed = false;
@@ -24,7 +21,7 @@ function Rocket(dna) {
 
   this.update = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
-    if (d < 20) {
+    if (d < targetSize / 2) {
       this.completed = true;
     }
     if (!this.completed && !this.crashed) {
@@ -45,9 +42,11 @@ function Rocket(dna) {
     if (showTrail) {
       var v = createVector(this.position.x, this.position.y);
       this.trail.push(v);
-      if (this.trail.length > 60) {
+      if (this.trail.length > 65) {
         this.trail.splice(0, 1);
       }
+    } else {
+      this.trail = [];
     }
 
     this.checkForCrash();
@@ -68,7 +67,7 @@ function Rocket(dna) {
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
-    fill(this.red, this.green, this.blue, 150);
+    fill(this.dna.red, this.dna.green, this.dna.blue, 150);
     rectMode(CENTER);
     rect(0, 0, 27, 7);
 
@@ -82,7 +81,7 @@ function Rocket(dna) {
       this.fitness *= 20 * (200 / this.time);
     }
     if (this.crashed) {
-      this.fitness = this.fitness / 10;
+      this.fitness = this.fitness / ((10 * 100) / this.time);
     }
   };
   this.checkForCrash = function () {
@@ -103,7 +102,7 @@ function Rocket(dna) {
   };
 
   this.renderTrail = function () {
-    stroke(this.red, this.green, this.blue, 80);
+    stroke(this.dna.redTrail, this.dna.greenTrail, this.dna.blueTrail, 80);
     beginShape();
     noFill();
     strokeWeight(3);

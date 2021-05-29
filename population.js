@@ -1,5 +1,5 @@
 function Population() {
-  this.size = 150;
+  this.size = 200;
   this.rockets = [];
   this.matingpool = [];
 
@@ -22,7 +22,7 @@ function Population() {
     this.matingpool = [];
 
     for (let i = 0; i < this.size; i++) {
-      let n = this.rockets[i].fitness * 100;
+      let n = this.rockets[i].fitness * 60;
       for (let j = 0; j < n; j++) {
         this.matingpool.push(this.rockets[i]);
       }

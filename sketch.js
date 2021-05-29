@@ -2,6 +2,7 @@ let population;
 let lifespan = 350;
 let count = 0;
 let generation = 0;
+let targetSize = 60;
 let alive;
 let lifespanTracker;
 let aliveTracker;
@@ -49,9 +50,7 @@ function setup() {
 
 function draw() {
   background(55);
-  fill(255, 133, 23);
-  noStroke();
-  ellipse(target.x, target.y, 40, 40);
+  renderTarget();
   renderInfos();
   population.run();
   count++;
@@ -92,4 +91,14 @@ function renderInfos() {
   lifespanTracker.html("Lifespan: " + count + "/" + lifespan);
   aliveTracker.html("Alive: " + alive);
   crashedTracker.html("Crashed: " + (population.size - alive));
+}
+
+function renderTarget() {
+  fill("#4c4cff");
+  noStroke();
+  ellipse(target.x, target.y, targetSize, targetSize);
+  fill("#FF4C4C");
+  ellipse(target.x, target.y, 45, 45);
+  fill("#FFFF7F");
+  ellipse(target.x, target.y, 25, 25);
 }
