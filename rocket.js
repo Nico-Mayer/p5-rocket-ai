@@ -78,12 +78,26 @@ function Rocket(dna) {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
     this.fitness = 1 / d;
     if (this.completed) {
-      this.fitness *= 20 * (200 / this.time);
+      this.fitness *= 2;
+      if (this.time < lifespan * 0.5) {
+        this.fitness *= 32;
+      } else if (this.time < lifespan * 0.6) {
+        this.fitness *= 16;
+      } else if (this.time < lifespan * 0.7) {
+        this.fitness *= 8;
+      } else if (this.time < lifespan * 0.8) {
+        this.fitness *= 4;
+      } else if (this.time < lifespan * 0.9) {
+        this.fitness *= 2;
+      }
     }
     if (this.crashed) {
-      this.fitness = this.fitness / ((10 * 100) / this.time);
+      this.fitness = this.fitness / (1500 / this.time);
+    } else if (!this.crashed && !this.completed) {
+      this.fitness *= 2;
     }
   };
+
   this.checkForCrash = function () {
     for (i = 0; i < obstacles.length; i++) {
       if (obstacles[i].checkCollision(this.position.x, this.position.y)) {

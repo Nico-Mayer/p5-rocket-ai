@@ -1,7 +1,8 @@
 function Population() {
-  this.size = 200;
+  this.size = 400;
   this.rockets = [];
   this.matingpool = [];
+  this.avgFitness = 0;
 
   for (let i = 0; i < this.size; i++) {
     this.rockets[i] = new Rocket();
@@ -11,6 +12,7 @@ function Population() {
     let maxfit = 0;
     for (let i = 0; i < this.size; i++) {
       this.rockets[i].calcFitness();
+      this.avgFitness += this.rockets[i].fitness;
       if (this.rockets[i].fitness > maxfit) {
         maxfit = this.rockets[i].fitness;
       }
@@ -27,6 +29,7 @@ function Population() {
         this.matingpool.push(this.rockets[i]);
       }
     }
+    this.avgFitness = this.avgFitness / this.size;
   };
 
   this.selection = function () {
