@@ -40,10 +40,14 @@ function Rocket(dna) {
         this.alive = false;
       }
     }
-    var v = createVector(this.position.x, this.position.y);
-    this.trail.push(v);
-    if (this.trail.length > 60) {
-      this.trail.splice(0, 1);
+
+    // Stores every location for the Trai
+    if (showTrail) {
+      var v = createVector(this.position.x, this.position.y);
+      this.trail.push(v);
+      if (this.trail.length > 60) {
+        this.trail.splice(0, 1);
+      }
     }
 
     this.checkForCrash();
@@ -52,11 +56,15 @@ function Rocket(dna) {
 
   this.render = function () {
     push();
-    var d = dist(this.position.x, this.position.y, target.x, target.y);
-    fill(255);
-    textSize(18);
-    text(floor(d), this.position.x, this.position.y - 10);
-    this.renderTrail();
+    if (showDistance) {
+      var d = dist(this.position.x, this.position.y, target.x, target.y);
+      fill(255);
+      textSize(18);
+      text(floor(d), this.position.x, this.position.y - 10);
+    }
+    if (showTrail) {
+      this.renderTrail();
+    }
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();

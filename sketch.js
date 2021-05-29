@@ -9,14 +9,13 @@ let genTracker;
 let crashedTracker;
 let traget;
 let obstacles;
-//let distanceBtn;
-let trailBtn;
+let distanceBtn = document.getElementById("distanceBtn");
+let trailBtn = document.getElementById("trailBtn");
+let showDistance = false;
+let showTrail = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  let distanceBtn = createButton("Show Distance");
-  distanceBtn.position(30, 130);
-  distanceBtn.mousePressed();
   obstacles = [];
   obstacles[0] = new Obstacle(
     "RECT",
@@ -78,6 +77,14 @@ function setupInfos() {
   aliveTracker.position(30, 60);
   crashedTracker = createP();
   crashedTracker.position(30, 85);
+
+  //Buttons
+  distanceBtn.onclick = function () {
+    showDistance = !showDistance;
+  };
+  trailBtn.onclick = function () {
+    showTrail = !showTrail;
+  };
 }
 
 function renderInfos() {

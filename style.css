@@ -11,3 +11,9 @@ p {
 canvas {
   display: block;
 }
+
+.menuBtns {
+  position: absolute;
+  left: 30px;
+  top: 130px;
+}
