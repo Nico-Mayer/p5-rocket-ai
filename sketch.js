@@ -36,7 +36,7 @@ function draw() {
   renderInfos();
   population.run();
   count++;
-  if (count == lifespan) {
+  if (count == lifespan || alive == 0) {
     population.evaluate();
     population.selection();
     generation++;

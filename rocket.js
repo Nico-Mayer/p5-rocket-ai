@@ -8,6 +8,7 @@ function Rocket(dna) {
   this.time = 0;
   this.alive = true;
   this.trail = [];
+  this.path = [];
 
   if (dna) {
     this.dna = dna;
@@ -21,6 +22,9 @@ function Rocket(dna) {
 
   this.update = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
+    var currPos = createVector(this.position.x, this.position.y);
+    this.path.push(currPos);
+
     if (d < targetSize / 2) {
       this.completed = true;
     }
@@ -40,8 +44,7 @@ function Rocket(dna) {
 
     // Stores every location for the Trai
     if (showTrail) {
-      var v = createVector(this.position.x, this.position.y);
-      this.trail.push(v);
+      this.trail.push(currPos);
       if (this.trail.length > 65) {
         this.trail.splice(0, 1);
       }
@@ -54,6 +57,10 @@ function Rocket(dna) {
   };
 
   this.render = function () {
+    var alpha = this.dna.alpha;
+    if (this.dna.colorMutate) {
+      var alpha = random(255);
+    }
     push();
     if (showDistance) {
       var d = dist(this.position.x, this.position.y, target.x, target.y);
@@ -67,7 +74,7 @@ function Rocket(dna) {
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
-    fill(this.dna.red, this.dna.green, this.dna.blue, 150);
+    fill(this.dna.red, this.dna.green, this.dna.blue, alpha);
     rectMode(CENTER);
     rect(0, 0, 27, 7);
 
@@ -76,8 +83,12 @@ function Rocket(dna) {
 
   this.calcFitness = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
+    var avgDistance = this.calcAvgDistance();
     this.fitness = 1 / d;
+    this.fitness += (1 / avgDistance) * 0.3;
+
     if (this.completed) {
+      this.fitness += 1 / this.time;
       this.fitness *= 2;
       if (this.time < lifespan * 0.5) {
         this.fitness *= 32;
@@ -94,7 +105,7 @@ function Rocket(dna) {
     if (this.crashed) {
       this.fitness = this.fitness / (1500 / this.time);
     } else if (!this.crashed && !this.completed) {
-      this.fitness *= 2;
+      this.fitness *= 4;
     }
   };
 
@@ -116,7 +127,11 @@ function Rocket(dna) {
   };
 
   this.renderTrail = function () {
-    stroke(this.dna.redTrail, this.dna.greenTrail, this.dna.blueTrail, 80);
+    var alpha = this.dna.alphaTrail;
+    if (this.dna.colorMutate) {
+      alpha = random(255);
+    }
+    stroke(this.dna.redTrail, this.dna.greenTrail, this.dna.blueTrail, alpha);
     beginShape();
     noFill();
     strokeWeight(3);
@@ -125,5 +140,15 @@ function Rocket(dna) {
       vertex(v.x, v.y);
     }
     endShape();
+  };
+
+  this.calcAvgDistance = function () {
+    var avgDistance = 0;
+    for (var i = 0; i < this.path.length; i++) {
+      var distance = dist(this.path[i].x, this.path[i].y, target.x, target.y);
+      avgDistance += distance;
+    }
+    avgDistance /= lifespan;
+    return floor(avgDistance);
   };
 }
