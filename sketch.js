@@ -1,5 +1,5 @@
 let population;
-let lifespan = 750;
+let lifespan = 800;
 let count = 0;
 let generation = 0;
 let targetSize = 60;
@@ -91,7 +91,7 @@ function renderTarget() {
 }
 
 function createObstacles() {
-  /* obstacles[0] = new Obstacle(
+  obstacles[0] = new Obstacle(
     "RECT",
     windowWidth / 2 - (windowWidth * 0.45) / 2,
     windowHeight * 0.35,
@@ -113,9 +113,9 @@ function createObstacles() {
     windowHeight * 0.75,
     70,
     70
-  ); */
+  );
 
-  obstacles[0] = new Obstacle(
+  /* obstacles[0] = new Obstacle(
     "RECT",
     0,
     windowHeight * 0.65,
@@ -128,5 +128,5 @@ function createObstacles() {
     windowHeight * 0.35,
     windowWidth - 400,
     35
-  );
+  ); */
 }

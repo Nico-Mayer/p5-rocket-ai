@@ -9,6 +9,7 @@ function Rocket(dna) {
   this.alive = true;
   this.trail = [];
   this.path = [];
+  this.isBest = false;
 
   if (dna) {
     this.dna = dna;
@@ -58,11 +59,14 @@ function Rocket(dna) {
 
   this.render = function () {
     var alpha = this.dna.alpha;
+    if (this.best) {
+      alpha = 255;
+    }
     if (this.dna.colorMutate) {
       var alpha = random(255);
     }
     push();
-    if (showDistance) {
+    if (showDistance || this.isBest) {
       var d = dist(this.position.x, this.position.y, target.x, target.y);
       fill(255);
       textSize(18);
@@ -83,29 +87,13 @@ function Rocket(dna) {
 
   this.calcFitness = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
-    var avgDistance = this.calcAvgDistance();
-    this.fitness = 1 / d;
-    this.fitness += (1 / avgDistance) * 0.3;
-
     if (this.completed) {
-      this.fitness += 1 / this.time;
-      this.fitness *= 2;
-      if (this.time < lifespan * 0.5) {
-        this.fitness *= 32;
-      } else if (this.time < lifespan * 0.6) {
-        this.fitness *= 16;
-      } else if (this.time < lifespan * 0.7) {
-        this.fitness *= 8;
-      } else if (this.time < lifespan * 0.8) {
-        this.fitness *= 4;
-      } else if (this.time < lifespan * 0.9) {
-        this.fitness *= 2;
-      }
+      this.fitness = 1.0 / 16 + 10000.0 / (this.time * this.time);
+    } else {
+      this.fitness = 1 / (d * d);
     }
     if (this.crashed) {
       this.fitness = this.fitness / (1500 / this.time);
-    } else if (!this.crashed && !this.completed) {
-      this.fitness *= 4;
     }
   };
 

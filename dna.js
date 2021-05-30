@@ -62,7 +62,7 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
     for (var i = 0; i < this.genes.length; i++) {
       if (random(1) < this.mutationRate) {
         this.genes[i] = p5.Vector.random2D();
-        this.genes[i].setMag(0.2);
+        this.genes[i].setMag(0.5);
         mutated++;
       }
     }
