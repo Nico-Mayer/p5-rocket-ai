@@ -26,17 +26,7 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
 
   this.crossover = function (partner) {
     let newgenes = [];
-    // Midpoint Evolve
-    /* let midpoint = floor(random(this.genes.length));
-    for (var i = 0; i < partner.genes.length; i++) {
-      if (i > midpoint) {
-        newgenes[i] = this.genes[i];
-      } else {
-        newgenes[i] = partner.genes[i];
-      }
-    } */
-
-    // Random gene Evolve
+    // Random gene Selection
     for (var i = 0; i < partner.genes.length; i++) {
       var ran = random(0, 1);
       if (ran > 0.5) {

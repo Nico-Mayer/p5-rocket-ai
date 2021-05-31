@@ -13,9 +13,26 @@
   </head>
 
   <body>
-    <div class="menuBtns">
-      <button id="distanceBtn">Show Distance</button>
-      <button id="trailBtn">Show Trails</button>
+    <div class="container">
+      <div class="tabs"></div>
+      <div class="divider">
+        <span id="generationTracker">Gen</span>
+        <span id="avgFitnessTracker">avgfitness</span>
+      </div>
+      <div class="divider">
+        <span id="aliveTracker">alive</span>
+        <span id="crashedTracker">crashed</span>
+      </div>
+      <div class="divider">
+        <span id="livespanTracker">lifespan</span>
+      </div>
+
+      <div class="menuBtns">
+        <button id="distanceBtn">Show Distance</button>
+        <button id="trailBtn">Show Trails</button>
+        <button id="editBtn">Edit Mode</button>
+        <button id="playBtn">Play</button>
+      </div>
     </div>
 
     <script src="obstacle.js"></script>

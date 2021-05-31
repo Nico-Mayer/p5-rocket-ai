@@ -55,7 +55,9 @@ function Population() {
   this.run = function () {
     for (let i = 0; i < this.size; i++) {
       this.rockets[i].render();
-      this.rockets[i].update();
+      if (simulating) {
+        this.rockets[i].update();
+      }
     }
   };
 

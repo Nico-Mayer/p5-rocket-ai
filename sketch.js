@@ -1,4 +1,5 @@
 let population;
+var multiplier = 100000000;
 let lifespan = 800;
 let count = 0;
 let generation = 0;
@@ -6,15 +7,20 @@ let targetSize = 60;
 let alive;
 let completed = 0;
 let crashed = 0;
+let editMode = false;
+let simulating = true;
 
 // Menu Trackers
-let genTracker;
-let avgFitnessTracker;
-let lifespanTracker;
-let aliveTracker;
-let crashedTracker;
+let genTracker = document.getElementById("generationTracker");
+let avgFitnessTracker = document.getElementById("avgFitnessTracker");
+let lifespanTracker = document.getElementById("livespanTracker");
+let aliveTracker = document.getElementById("aliveTracker");
+let crashedTracker = document.getElementById("crashedTracker");
+
 let distanceBtn = document.getElementById("distanceBtn");
 let trailBtn = document.getElementById("trailBtn");
+let editBtn = document.getElementById("editBtn");
+let playBtn = document.getElementById("playBtn");
 
 let traget;
 let obstacles;
@@ -25,7 +31,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   obstacles = [];
   createObstacles();
-
   population = new Population();
   alive = population.size;
   setupInfos();
@@ -36,39 +41,34 @@ function draw() {
   background(55);
   renderTarget();
   renderInfos();
-  population.run();
-  count++;
-  if (
-    count == lifespan ||
-    alive == 0 ||
-    crashed + completed == population.size
-  ) {
-    population.evaluate();
-    population.selection();
-    generation++;
-    hits = 0;
-    count = 0;
-    alive = population.size;
-    crashed = 0;
-    completed = 0;
+
+  if (!editMode) {
+    if (
+      count == lifespan ||
+      alive == 0 ||
+      crashed + completed == population.size
+    ) {
+      population.evaluate();
+      population.selection();
+      generation++;
+      count = 0;
+      alive = population.size;
+      crashed = 0;
+      completed = 0;
+    }
+
+    population.run();
+    if (simulating) {
+      count++;
+    }
   }
+
   for (i = 0; i < obstacles.length; i++) {
     obstacles[i].render();
   }
 }
 
 function setupInfos() {
-  genTracker = createP();
-  genTracker.position(30, 10);
-  avgFitnessTracker = createP();
-  avgFitnessTracker.position(30, 35);
-  lifespanTracker = createP();
-  lifespanTracker.position(30, 60);
-  aliveTracker = createP();
-  aliveTracker.position(30, 85);
-  crashedTracker = createP();
-  crashedTracker.position(30, 110);
-
   //Buttons
   distanceBtn.onclick = function () {
     showDistance = !showDistance;
@@ -76,16 +76,41 @@ function setupInfos() {
   trailBtn.onclick = function () {
     showTrail = !showTrail;
   };
+  editBtn.onclick = function () {
+    editMode = !editMode;
+    population = new Population();
+    generation = 0;
+    count = 0;
+    alive = population.size;
+    crashed = 0;
+    completed = 0;
+  };
+  playBtn.onclick = function () {
+    simulating = !simulating;
+    if (editMode) {
+      editMode = false;
+      simulating = true;
+    }
+  };
 }
 
+function resetValues() {}
+
 function renderInfos() {
-  genTracker.html("Generation: " + generation);
-  avgFitnessTracker.html(
-    "Avg Fitness: " + floor(population.avgFitness * 100000)
-  );
-  lifespanTracker.html("Lifespan: " + count + "/" + lifespan);
-  aliveTracker.html("Alive: " + alive);
-  crashedTracker.html("Crashed: " + crashed);
+  if (completed > 0) {
+    multiplier = 20000;
+  }
+  genTracker.innerHTML = "GEN: " + generation;
+  avgFitnessTracker.innerHTML =
+    "AVG FIT: " + floor(population.avgFitness * multiplier);
+  lifespanTracker.innerHTML = "LIFESPANN: " + count + "/" + lifespan;
+  aliveTracker.innerHTML = "ALIVE: " + alive;
+  crashedTracker.innerHTML = "CRASHED: " + crashed;
+  if (simulating) {
+    playBtn.innerHTML = "PAUSE";
+  } else {
+    playBtn.innerHTML = "PLAY";
+  }
 }
 
 function renderTarget() {

@@ -22,6 +22,7 @@ function Rocket(dna) {
 
   this.update = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
+    // Check if Rocket hits Target
     if (d < targetSize / 2) {
       this.completed = true;
       if (this.alive) {
@@ -29,19 +30,21 @@ function Rocket(dna) {
         this.alive = false;
       }
     }
-    if (!this.completed && !this.crashed) {
-      this.vel.add(this.acc);
-      this.position.add(this.vel);
-      this.acc.mult(0);
-      this.vel.limit(10);
-      this.time++;
-    }
+    // Check if Rocked is Crasehd
     if (this.crashed) {
       if (this.alive) {
         crashed++;
         alive--;
         this.alive = false;
       }
+    }
+    // Move Rocket
+    if (!this.completed && !this.crashed) {
+      this.vel.add(this.acc);
+      this.position.add(this.vel);
+      this.acc.mult(0);
+      this.vel.limit(10);
+      this.time++;
     }
 
     // Stores every location for the Trai
