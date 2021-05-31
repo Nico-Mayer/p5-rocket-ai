@@ -1,8 +1,8 @@
 function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
-  this.mutationRate = 0.003;
   this.colorMutate = false;
   this.alpha = 150;
   this.alphaTrail = 80;
+  this.mutationRate = 0.003;
   if (genes) {
     this.genes = genes;
     this.red = red;
@@ -49,6 +49,9 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
 
   this.mutation = function () {
     var mutated = 0;
+    if (generation != 0 && generation % 37 == 0) {
+      this.mutationRate += 0.03;
+    }
     for (var i = 0; i < this.genes.length; i++) {
       if (random(1) < this.mutationRate) {
         this.genes[i] = p5.Vector.random2D();

@@ -9,6 +9,7 @@ let completed = 0;
 let crashed = 0;
 let editMode = false;
 let simulating = true;
+let finished = false;
 
 // Menu Trackers
 let genTracker = document.getElementById("generationTracker");
@@ -78,6 +79,7 @@ function setupInfos() {
   };
   editBtn.onclick = function () {
     editMode = !editMode;
+    simulating = false;
     population = new Population();
     generation = 0;
     count = 0;
@@ -93,8 +95,6 @@ function setupInfos() {
     }
   };
 }
-
-function resetValues() {}
 
 function renderInfos() {
   if (completed > 0) {
@@ -124,7 +124,7 @@ function renderTarget() {
 }
 
 function createObstacles() {
-  obstacles[0] = new Obstacle(
+  /* obstacles[0] = new Obstacle(
     "RECT",
     windowWidth / 2 - (windowWidth * 0.45) / 2,
     windowHeight * 0.35,
@@ -146,9 +146,9 @@ function createObstacles() {
     windowHeight * 0.75,
     70,
     70
-  );
+  ); */
 
-  /* obstacles[0] = new Obstacle(
+  obstacles[0] = new Obstacle(
     "RECT",
     0,
     windowHeight * 0.65,
@@ -161,5 +161,5 @@ function createObstacles() {
     windowHeight * 0.35,
     windowWidth - 400,
     35
-  ); */
+  );
 }

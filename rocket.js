@@ -24,6 +24,7 @@ function Rocket(dna) {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
     // Check if Rocket hits Target
     if (d < targetSize / 2) {
+      finished = true;
       this.completed = true;
       if (this.alive) {
         completed++;
