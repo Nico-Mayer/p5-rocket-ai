@@ -4,6 +4,8 @@ let count = 0;
 let generation = 0;
 let targetSize = 60;
 let alive;
+let completed = 0;
+let crashed = 0;
 
 // Menu Trackers
 let genTracker;
@@ -36,13 +38,19 @@ function draw() {
   renderInfos();
   population.run();
   count++;
-  if (count == lifespan || alive == 0) {
+  if (
+    count == lifespan ||
+    alive == 0 ||
+    crashed + completed == population.size
+  ) {
     population.evaluate();
     population.selection();
     generation++;
     hits = 0;
     count = 0;
     alive = population.size;
+    crashed = 0;
+    completed = 0;
   }
   for (i = 0; i < obstacles.length; i++) {
     obstacles[i].render();
@@ -77,7 +85,7 @@ function renderInfos() {
   );
   lifespanTracker.html("Lifespan: " + count + "/" + lifespan);
   aliveTracker.html("Alive: " + alive);
-  crashedTracker.html("Crashed: " + (population.size - alive));
+  crashedTracker.html("Crashed: " + crashed);
 }
 
 function renderTarget() {

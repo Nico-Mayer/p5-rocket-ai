@@ -8,7 +8,6 @@ function Rocket(dna) {
   this.time = 0;
   this.alive = true;
   this.trail = [];
-  this.path = [];
   this.isBest = false;
 
   if (dna) {
@@ -23,21 +22,23 @@ function Rocket(dna) {
 
   this.update = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
-    var currPos = createVector(this.position.x, this.position.y);
-    this.path.push(currPos);
-
     if (d < targetSize / 2) {
       this.completed = true;
+      if (this.alive) {
+        completed++;
+        this.alive = false;
+      }
     }
     if (!this.completed && !this.crashed) {
       this.vel.add(this.acc);
       this.position.add(this.vel);
       this.acc.mult(0);
-      this.vel.limit(8);
+      this.vel.limit(10);
       this.time++;
     }
     if (this.crashed) {
       if (this.alive) {
+        crashed++;
         alive--;
         this.alive = false;
       }
@@ -45,6 +46,7 @@ function Rocket(dna) {
 
     // Stores every location for the Trai
     if (showTrail) {
+      var currPos = createVector(this.position.x, this.position.y);
       this.trail.push(currPos);
       if (this.trail.length > 65) {
         this.trail.splice(0, 1);
@@ -59,7 +61,7 @@ function Rocket(dna) {
 
   this.render = function () {
     var alpha = this.dna.alpha;
-    if (this.best) {
+    if (this.isBest) {
       alpha = 255;
     }
     if (this.dna.colorMutate) {
@@ -128,15 +130,5 @@ function Rocket(dna) {
       vertex(v.x, v.y);
     }
     endShape();
-  };
-
-  this.calcAvgDistance = function () {
-    var avgDistance = 0;
-    for (var i = 0; i < this.path.length; i++) {
-      var distance = dist(this.path[i].x, this.path[i].y, target.x, target.y);
-      avgDistance += distance;
-    }
-    avgDistance /= lifespan;
-    return floor(avgDistance);
   };
 }

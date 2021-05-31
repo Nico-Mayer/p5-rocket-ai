@@ -1,9 +1,9 @@
 function Population() {
-  this.size = 10;
+  this.size = 150;
   this.rockets = [];
   this.matingpool = [];
   this.avgFitness = 0;
-  this.best;
+  this.pickRate = 0.02;
 
   for (let i = 0; i < this.size; i++) {
     this.rockets[i] = new Rocket();
@@ -35,16 +35,20 @@ function Population() {
 
   this.selection = function () {
     let newrockets = [];
-    this.best = this.rockets[this.calcBest()];
-    newrockets[0] = new Rocket(this.best.dna);
-    for (let i = 1; i < this.rockets.length; i++) {
+    var bestRockets = this.chooseBest();
+    for (let i = 0; i < bestRockets.length; i++) {
+      newrockets[i] = new Rocket(bestRockets[i].dna);
+      newrockets[i].isBest = true;
+    }
+
+    for (let i = bestRockets.length; i < this.rockets.length; i++) {
       var parentA = random(this.matingpool).dna;
       var parentB = random(this.matingpool).dna;
       var child = parentA.crossover(parentB);
       child.mutation();
       newrockets[i] = new Rocket(child);
     }
-    newrockets[0].isBest = true;
+
     this.rockets = newrockets;
   };
 
@@ -55,17 +59,24 @@ function Population() {
     }
   };
 
-  this.calcBest = function () {
-    var max = 0;
-    var maxIndex = 0;
-    for (let i = 0; i < this.size; i++) {
-      this.rockets[i].calcFitness();
-      var fitness = this.rockets[i].fitness;
-      if (fitness > max) {
-        max = fitness;
-        maxIndex = i;
-      }
+  this.chooseBest = function () {
+    var amountPicked = floor(this.size * this.pickRate);
+    if (amountPicked < 1) {
+      amountPicked = 1;
     }
-    return maxIndex;
+    var bestRockets = [];
+    //
+    var sortedRockets = this.rockets.sort((a, b) => {
+      if (a.fitness < b.fitness) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
+    for (let i = 0; i < amountPicked; i++) {
+      bestRockets.push(sortedRockets[i]);
+    }
+    return bestRockets;
   };
 }
