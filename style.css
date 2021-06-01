@@ -20,9 +20,22 @@ button {
   width: 100%;
 }
 
-.menuBtns {
+.menuBtnContainer {
   flex-direction: column;
   flex-grow: 1;
+  font-family: "Roboto", sans-serif;
+  color: white;
+}
+.menuBtn {
+  height: 30px;
+  border: solid black 1px;
+  background: rgba(247, 248, 245, 0.5);
+  text-align: center;
+  cursor: pointer;
+}
+.menuBtn:hover {
+  background: rgba(100, 100, 100, 0.5);
+  color: orange;
 }
 
 .container {
@@ -32,8 +45,7 @@ button {
   flex-direction: column;
   left: 30px;
   top: 15px;
-  background: rgb(42, 42, 42);
-
+  background: rgba(42, 42, 42, 0.5);
   width: 200px;
   height: 350px;
 }

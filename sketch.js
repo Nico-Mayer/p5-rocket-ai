@@ -106,10 +106,28 @@ function renderInfos() {
   lifespanTracker.innerHTML = "LIFESPANN: " + count + "/" + lifespan;
   aliveTracker.innerHTML = "ALIVE: " + alive;
   crashedTracker.innerHTML = "CRASHED: " + crashed;
+
+  // Distance Btns
+  if (showDistance) {
+    distanceBtn.style.background = "green";
+  } else {
+    distanceBtn.style.background = "rgba(247, 248, 245, 0.5)";
+  }
+
+  // Show Trails Btn
+  if (showTrail) {
+    trailBtn.style.background = "green";
+  } else {
+    trailBtn.style.background = "rgba(247, 248, 245, 0.5)";
+  }
+
+  // Play Btn
   if (simulating) {
     playBtn.innerHTML = "PAUSE";
+    playBtn.style.background = "red";
   } else {
     playBtn.innerHTML = "PLAY";
+    playBtn.style.background = "green";
   }
 }
 
