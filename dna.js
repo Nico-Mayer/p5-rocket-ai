@@ -49,7 +49,14 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
 
   this.mutation = function () {
     var mutated = 0;
-    if (generation != 0 && generation % 37 == 0) {
+
+    if (!finished && generation > 50) {
+      this.mutationRate = 0.005;
+    } else {
+      this.mutationRate = 0.003;
+    }
+
+    if (generation != 0 && generation % 32 == 0) {
       this.mutationRate += 0.035;
     }
     for (var i = 0; i < this.genes.length; i++) {
