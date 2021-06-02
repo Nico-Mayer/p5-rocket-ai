@@ -82,6 +82,7 @@ function Rocket(dna) {
     if (showTrail) {
       this.renderTrail();
     }
+
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
@@ -118,7 +119,8 @@ function Rocket(dna) {
       this.fitness = this.fitness / (1500 / this.time);
     }
     if (this.wayIsClear) {
-      this.fitness = this.fitness * 2;
+      this.fitness = this.fitness * 16;
+      console.log("Way was clear for him");
     }
   };
 
