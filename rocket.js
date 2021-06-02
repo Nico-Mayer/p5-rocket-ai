@@ -2,6 +2,7 @@ function Rocket(dna) {
   this.position = createVector(windowWidth / 2, windowHeight - 20);
   this.vel = createVector();
   this.acc = createVector();
+  this.wayIsClear = false;
   this.fitness = 0;
   this.completed = false;
   this.crashed = false;
@@ -93,6 +94,21 @@ function Rocket(dna) {
 
   this.calcFitness = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
+    // Test
+    var lineToTarget = this.calcTargetLine(this.position, target, d);
+    var colided = 0;
+    for (i = 0; i < lineToTarget.length; i++) {
+      for (j = 0; j < obstacles.length; j++) {
+        if (obstacles[j].checkCollision(lineToTarget[i].x, lineToTarget[i].y)) {
+          colided++;
+        }
+      }
+    }
+    if (colided == 0) {
+      this.wayIsClear = true;
+    }
+    // TEST
+
     if (this.completed) {
       this.fitness = 1.0 / 16 + 10000.0 / (this.time * this.time);
     } else {
@@ -100,6 +116,9 @@ function Rocket(dna) {
     }
     if (this.crashed) {
       this.fitness = this.fitness / (1500 / this.time);
+    }
+    if (this.wayIsClear) {
+      this.fitness = this.fitness * 2;
     }
   };
 
@@ -134,5 +153,22 @@ function Rocket(dna) {
       vertex(v.x, v.y);
     }
     endShape();
+  };
+
+  this.calcTargetLine = function (pointA, pointB, distance) {
+    var diff_X = pointB.x - pointA.x;
+    var diff_Y = pointB.y - pointA.y;
+    var pointNum = floor(distance);
+
+    var interval_X = diff_X / (pointNum + 1);
+    var interval_Y = diff_Y / (pointNum + 1);
+
+    var points = [];
+    for (let i = 1; i <= pointNum; i++) {
+      points.push(
+        createVector(pointA.x + interval_X * i, pointA.y + interval_Y * i)
+      );
+    }
+    return points;
   };
 }

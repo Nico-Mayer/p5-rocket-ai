@@ -1,9 +1,9 @@
 function Population() {
-  this.size = 150;
+  this.size = 250;
   this.rockets = [];
   this.matingpool = [];
   this.avgFitness = 0;
-  this.pickRate = 0.02;
+  this.pickRate = 0.01;
 
   for (let i = 0; i < this.size; i++) {
     this.rockets[i] = new Rocket();
