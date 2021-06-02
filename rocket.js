@@ -49,7 +49,7 @@ function Rocket(dna) {
       this.time++;
     }
 
-    // Stores every location for the Trai
+    // Stores every location for the Trail
     if (showTrail) {
       var currPos = createVector(this.position.x, this.position.y);
       this.trail.push(currPos);
@@ -59,7 +59,6 @@ function Rocket(dna) {
     } else {
       this.trail = [];
     }
-
     this.checkForCrash();
     this.addForce(this.dna.genes[count]);
   };
@@ -82,33 +81,18 @@ function Rocket(dna) {
     if (showTrail) {
       this.renderTrail();
     }
-
     translate(this.position.x, this.position.y);
     rotate(this.vel.heading());
     noStroke();
     fill(this.dna.red, this.dna.green, this.dna.blue, alpha);
     rectMode(CENTER);
     rect(0, 0, 27, 7);
-
     pop();
   };
 
   this.calcFitness = function () {
     var d = dist(this.position.x, this.position.y, target.x, target.y);
-    // Test
-    var lineToTarget = this.calcTargetLine(this.position, target, d);
-    var colided = 0;
-    for (i = 0; i < lineToTarget.length; i++) {
-      for (j = 0; j < obstacles.length; j++) {
-        if (obstacles[j].checkCollision(lineToTarget[i].x, lineToTarget[i].y)) {
-          colided++;
-        }
-      }
-    }
-    if (colided == 0) {
-      this.wayIsClear = true;
-    }
-    // TEST
+    this.checkForClearWay(d);
 
     if (this.completed) {
       this.fitness = 1.0 / 16 + 10000.0 / (this.time * this.time);
@@ -120,7 +104,6 @@ function Rocket(dna) {
     }
     if (this.wayIsClear) {
       this.fitness = this.fitness * 16;
-      console.log("Way was clear for him");
     }
   };
 
@@ -157,7 +140,27 @@ function Rocket(dna) {
     endShape();
   };
 
-  this.calcTargetLine = function (pointA, pointB, distance) {
+  //______________Functions to detect if way to target is Clear_____________________
+  this.checkForClearWay = function (distance) {
+    var lineToTarget = this.calcRocketToTargetLine(
+      this.position,
+      target,
+      distance
+    );
+    var colided = 0;
+    for (i = 0; i < lineToTarget.length; i++) {
+      for (j = 0; j < obstacles.length; j++) {
+        if (obstacles[j].checkCollision(lineToTarget[i].x, lineToTarget[i].y)) {
+          colided++;
+        }
+      }
+    }
+    if (colided == 0) {
+      this.wayIsClear = true;
+    }
+  };
+
+  this.calcRocketToTargetLine = function (pointA, pointB, distance) {
     var diff_X = pointB.x - pointA.x;
     var diff_Y = pointB.y - pointA.y;
     var pointNum = floor(distance);

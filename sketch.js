@@ -120,6 +120,16 @@ function renderInfos() {
   } else {
     trailBtn.style.background = "rgba(247, 248, 245, 0.5)";
   }
+  // Edit Mode Buttons
+  if (editMode) {
+    editBtn.style.background = "orange";
+    let p = createP("Edit Mode");
+    p.position(windowWidth / 2 - 50, 30);
+    p.addClass("editModeCaption");
+    p.addClass("blinking");
+  } else {
+    editBtn.style.background = "rgba(247, 248, 245, 0.5)";
+  }
 
   // Play Btn
   if (simulating) {

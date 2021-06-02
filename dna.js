@@ -3,6 +3,7 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
   this.alpha = 150;
   this.alphaTrail = 80;
   this.mutationRate = 0.003;
+  this.highMutateGen = false;
   if (genes) {
     this.genes = genes;
     this.red = red;
@@ -49,15 +50,14 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
 
   this.mutation = function () {
     var mutated = 0;
-
     if (!finished && generation > 50) {
       this.mutationRate = 0.005;
     } else {
       this.mutationRate = 0.003;
     }
-
-    if (generation != 0 && generation % 32 == 0) {
+    if (generation != 0 && generation % 3 == 0) {
       this.mutationRate += 0.035;
+      this.highMutateGen = true;
     }
     for (var i = 0; i < this.genes.length; i++) {
       if (random(1) < this.mutationRate) {
@@ -66,7 +66,7 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
         mutated++;
       }
     }
-    if (mutated > lifespan * 0.008) {
+    if (mutated > lifespan * 0.008 && !this.highMutateGen) {
       this.colorMutate = true;
       this.red = random(255);
       this.green = random(255);
