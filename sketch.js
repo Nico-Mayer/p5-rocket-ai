@@ -11,6 +11,12 @@ let editMode = false;
 let simulating = true;
 let finished = false;
 
+//Edit Mode vars
+let overBox = false;
+let resizeMode = false;
+let editPosMode = false;
+let addMode = true;
+
 // Menu Trackers
 let genTracker = document.getElementById("generationTracker");
 let avgFitnessTracker = document.getElementById("avgFitnessTracker");
@@ -63,11 +69,61 @@ function draw() {
       count++;
     }
   }
+  if (editMode) {
+    checkOverObstacle();
+  }
 
   for (i = 0; i < obstacles.length; i++) {
     obstacles[i].render();
   }
 }
+
+//_______________________EDIT MODE TEST AREA_______________________
+function checkOverObstacle() {
+  let count = 0;
+  for (var i = 0; i < obstacles.length; i++) {
+    if (obstacles[i].checkMouseOver()) {
+      obstacles[i].mouseOver = true;
+      count++;
+    } else {
+      obstacles[i].mouseOver = false;
+    }
+  }
+  if (count > 0) {
+    overBox = true;
+  } else {
+    overBox = false;
+  }
+}
+function keyPressed() {
+  if (keyCode == 65) {
+    addMode = true;
+    resizeMode = false;
+    editPosMode = false;
+  }
+  if (!overBox && keyCode == 65 && addMode) {
+    obstacles.push(new Obstacle("RECT", mouseX - 30, mouseY - 30, 60, 60));
+  }
+  if (keyCode == 82) {
+    resizeMode = true;
+    editPosMode = false;
+    addMode = false;
+    console.log("resizemode = " + resizeMode);
+    console.log("addMode = " + addMode);
+  }
+  if (keyCode == 84) {
+    editPosMode = true;
+    resizeMode = false;
+    addMode = false;
+  }
+  for (var i = 0; i < obstacles.length; i++) {
+    if (obstacles[i].mouseOver && keyCode == 68) {
+      obstacles.splice(i, 1);
+    }
+  }
+}
+
+//______________________END________________________________________
 
 function setupInfos() {
   //Buttons

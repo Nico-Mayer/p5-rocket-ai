@@ -4,6 +4,9 @@ function Obstacle(mode, x, y, width, height) {
   this.y = y;
   this.width = width;
   this.height = height;
+  this.mouseOver = false;
+  this.rezisable = false;
+  this.dragabele = false;
 
   this.checkCollision = function (rocketX, rocketY) {
     var d = dist(rocketX, rocketY, this.x, this.y);
@@ -22,7 +25,16 @@ function Obstacle(mode, x, y, width, height) {
 
   this.render = function () {
     push();
-    fill(255);
+    if (!editMode) {
+      fill(255);
+    } else if (addMode) {
+      fill("#58D3F7");
+    } else if (editPosMode) {
+      fill("#F5A9F2");
+    } else if (resizeMode) {
+      fill("#F2F5A9");
+    }
+
     if (this.mode == "RECT") {
       rect(this.x, this.y, this.width, this.height);
     } else if (this.mode == "ELLIPSE") {
@@ -30,5 +42,16 @@ function Obstacle(mode, x, y, width, height) {
     }
 
     pop();
+  };
+
+  this.checkMouseOver = function () {
+    if (
+      mouseX > this.x &&
+      mouseX < this.x + this.width &&
+      mouseY > this.y &&
+      mouseY < this.y + this.height
+    ) {
+      return true;
+    }
   };
 }
