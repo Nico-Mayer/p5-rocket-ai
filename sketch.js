@@ -71,6 +71,21 @@ function draw() {
   }
   if (editMode) {
     checkOverObstacle();
+    for (var i = 0; i < obstacles.length; i++) {
+      obstacles[i].render();
+      if (mouseIsPressed && resizeMode && obstacles[i].mouseOver) {
+        obstacles[i].width = constrain(
+          mouseX - obstacles[i].x,
+          20,
+          windowWidth
+        );
+        obstacles[i].height = constrain(
+          mouseY - obstacles[i].y,
+          20,
+          windowHeight
+        );
+      }
+    }
   }
 
   for (i = 0; i < obstacles.length; i++) {
@@ -96,29 +111,31 @@ function checkOverObstacle() {
   }
 }
 function keyPressed() {
-  if (keyCode == 65) {
-    addMode = true;
-    resizeMode = false;
-    editPosMode = false;
-  }
-  if (!overBox && keyCode == 65 && addMode) {
-    obstacles.push(new Obstacle("RECT", mouseX - 30, mouseY - 30, 60, 60));
-  }
-  if (keyCode == 82) {
-    resizeMode = true;
-    editPosMode = false;
-    addMode = false;
-    console.log("resizemode = " + resizeMode);
-    console.log("addMode = " + addMode);
-  }
-  if (keyCode == 84) {
-    editPosMode = true;
-    resizeMode = false;
-    addMode = false;
-  }
-  for (var i = 0; i < obstacles.length; i++) {
-    if (obstacles[i].mouseOver && keyCode == 68) {
-      obstacles.splice(i, 1);
+  if (editMode) {
+    if (keyCode == 65) {
+      addMode = true;
+      resizeMode = false;
+      editPosMode = false;
+    }
+    if (!overBox && keyCode == 65 && addMode) {
+      obstacles.push(new Obstacle("RECT", mouseX - 30, mouseY - 30, 60, 60));
+    }
+    if (keyCode == 82) {
+      resizeMode = true;
+      editPosMode = false;
+      addMode = false;
+      console.log("resizemode = " + resizeMode);
+      console.log("addMode = " + addMode);
+    }
+    if (keyCode == 84) {
+      editPosMode = true;
+      resizeMode = false;
+      addMode = false;
+    }
+    for (var i = 0; i < obstacles.length; i++) {
+      if (obstacles[i].mouseOver && keyCode == 68) {
+        obstacles.splice(i, 1);
+      }
     }
   }
 }

@@ -34,6 +34,9 @@ function Obstacle(mode, x, y, width, height) {
     } else if (resizeMode) {
       fill("#F2F5A9");
     }
+    if (this.mouseOver) {
+      stroke(255, 0, 0);
+    }
 
     if (this.mode == "RECT") {
       rect(this.x, this.y, this.width, this.height);
