@@ -46,20 +46,22 @@ button {
   color: orange;
 }
 .editModeCaption {
+  position: absolute;
+  visibility: hidden;
+  top: 30px;
+  text-align: center;
+  width: 100%;
   font-family: "Roboto", sans-serif;
   font-size: 28px;
   font-weight: bold;
   color: orange;
 }
 .blinking {
-  animation: mymove 2s infinite alternate;
+  animation: blinker 1s linear infinite;
 }
-@keyframes mymove {
-  from {
+@keyframes blinker {
+  50% {
     opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 

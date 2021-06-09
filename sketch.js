@@ -16,6 +16,7 @@ let overBox = false;
 let resizeMode = false;
 let editPosMode = false;
 let addMode = true;
+let tempArr = [];
 
 // Menu Trackers
 let genTracker = document.getElementById("generationTracker");
@@ -32,7 +33,7 @@ let playBtn = document.getElementById("playBtn");
 let traget;
 let obstacles;
 let showDistance = false;
-let showTrail = true;
+let showTrail = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -49,6 +50,7 @@ function draw() {
   renderTarget();
   renderInfos();
 
+  //_________GAME MODE__________
   if (!editMode) {
     if (
       count == lifespan ||
@@ -68,40 +70,83 @@ function draw() {
     if (simulating) {
       count++;
     }
-  }
-  if (editMode) {
-    checkOverObstacle();
-    for (var i = 0; i < obstacles.length; i++) {
+    for (i = 0; i < obstacles.length; i++) {
       obstacles[i].render();
-      if (mouseIsPressed && resizeMode && obstacles[i].mouseOver) {
-        obstacles[i].width = constrain(
-          mouseX - obstacles[i].x,
-          20,
-          windowWidth
-        );
-        obstacles[i].height = constrain(
-          mouseY - obstacles[i].y,
-          20,
-          windowHeight
-        );
-      }
     }
   }
+  //_________EDIT MODE__________
+  if (editMode) {
+    checkOverObstacle();
+    for (var i = 0; i < tempArr.length; i++) {
+      tempArr[i].render();
+      if (mouseIsPressed && tempArr[i].rezisable && resizeMode) {
+        tempArr[i].width = constrain(mouseX - tempArr[i].x, 20, windowWidth);
+        tempArr[i].height = constrain(mouseY - tempArr[i].y, 20, windowHeight);
+      }
 
-  for (i = 0; i < obstacles.length; i++) {
-    obstacles[i].render();
+      if (mouseIsPressed && tempArr[i].dragabele && editPosMode) {
+        tempArr[i].x = mouseX - xOffset;
+        tempArr[i].y = mouseY - yOffset;
+      }
+    }
   }
 }
 
 //_______________________EDIT MODE TEST AREA_______________________
+function keyPressed() {
+  if (keyCode == 82) {
+    resizeMode = true;
+    editPosMode = false;
+    addMode = false;
+  }
+  if (keyCode == 84) {
+    editPosMode = true;
+    resizeMode = false;
+    addMode = false;
+  }
+  if (keyCode == 65) {
+    addMode = true;
+    editPosMode = false;
+    resizeMode = false;
+  }
+
+  for (var i = 0; i < tempArr.length; i++) {
+    if (tempArr[i].mouseOver && keyCode == 68) {
+      tempArr.splice(i, 1);
+      console.log("moin");
+    }
+  }
+}
+function mousePressed() {
+  if (!overBox && addMode) {
+    tempArr.push(new Obstacle("RECT", mouseX, mouseY, 60, 60));
+  }
+  for (var i = 0; i < tempArr.length; i++) {
+    if (tempArr[i].mouseOver && resizeMode) {
+      tempArr[i].rezisable = true;
+    } else if (tempArr[i].mouseOver && editPosMode) {
+      tempArr[i].dragabele = true;
+      xOffset = mouseX - tempArr[i].x;
+      yOffset = mouseY - tempArr[i].y;
+    }
+  }
+}
+
+function mouseReleased() {
+  for (var i = 0; i < tempArr.length; i++) {
+    tempArr[i].rezisable = false;
+    tempArr[i].dragabele = false;
+  }
+}
+
 function checkOverObstacle() {
   let count = 0;
-  for (var i = 0; i < obstacles.length; i++) {
-    if (obstacles[i].checkMouseOver()) {
-      obstacles[i].mouseOver = true;
+  for (var i = 0; i < tempArr.length; i++) {
+    if (tempArr[i].checkMouseOver()) {
+      tempArr[i].mouseOver = true;
       count++;
     } else {
-      obstacles[i].mouseOver = false;
+      tempArr[i].mouseOver = false;
     }
   }
   if (count > 0) {
@@ -110,36 +155,6 @@ function checkOverObstacle() {
     overBox = false;
   }
 }
-function keyPressed() {
-  if (editMode) {
-    if (keyCode == 65) {
-      addMode = true;
-      resizeMode = false;
-      editPosMode = false;
-    }
-    if (!overBox && keyCode == 65 && addMode) {
-      obstacles.push(new Obstacle("RECT", mouseX - 30, mouseY - 30, 60, 60));
-    }
-    if (keyCode == 82) {
-      resizeMode = true;
-      editPosMode = false;
-      addMode = false;
-      console.log("resizemode = " + resizeMode);
-      console.log("addMode = " + addMode);
-    }
-    if (keyCode == 84) {
-      editPosMode = true;
-      resizeMode = false;
-      addMode = false;
-    }
-    for (var i = 0; i < obstacles.length; i++) {
-      if (obstacles[i].mouseOver && keyCode == 68) {
-        obstacles.splice(i, 1);
-      }
-    }
-  }
-}
-
 //______________________END________________________________________
 
 function setupInfos() {
@@ -151,21 +166,35 @@ function setupInfos() {
     showTrail = !showTrail;
   };
   editBtn.onclick = function () {
+    if (!editMode) {
+      document.getElementById("editModeCaption").style.visibility = "visible";
+      tempArr = [...obstacles];
+      obstacles = [];
+    } else if (editMode) {
+      document.getElementById("editModeCaption").style.visibility = "hidden";
+      obstacles = [...tempArr];
+      tempArr = [];
+    }
+
     editMode = !editMode;
-    simulating = false;
+    simulating = !simulating;
     population = new Population();
     generation = 0;
     count = 0;
     alive = population.size;
     crashed = 0;
     completed = 0;
+    clear();
   };
   playBtn.onclick = function () {
     simulating = !simulating;
     if (editMode) {
+      obstacles = [...tempArr];
+      tempArr = [];
       editMode = false;
       simulating = true;
     }
+    clear();
   };
 }
 
@@ -196,10 +225,6 @@ function renderInfos() {
   // Edit Mode Buttons
   if (editMode) {
     editBtn.style.background = "orange";
-    let p = createP("Edit Mode");
-    p.position(windowWidth / 2 - 50, 30);
-    p.addClass("editModeCaption");
-    p.addClass("blinking");
   } else {
     editBtn.style.background = "rgba(247, 248, 245, 0.5)";
   }
@@ -222,45 +247,4 @@ function renderTarget() {
   ellipse(target.x, target.y, 45, 45);
   fill("#FFFF7F");
   ellipse(target.x, target.y, 25, 25);
-}
-
-function createObstacles() {
-  obstacles[0] = new Obstacle(
-    "RECT",
-    windowWidth / 2 - (windowWidth * 0.45) / 2,
-    windowHeight * 0.35,
-    windowWidth * 0.45,
-    35
-  );
-  obstacles[1] = new Obstacle(
-    "RECT",
-    windowWidth - 400,
-    windowHeight * 0.55,
-    190,
-    35
-  );
-  obstacles[2] = new Obstacle("RECT", 200, windowHeight * 0.25, 270, 35);
-  obstacles[3] = new Obstacle("RECT", 900, 50, 30, 190);
-  obstacles[4] = new Obstacle(
-    "ELLIPSE",
-    windowWidth / 2,
-    windowHeight * 0.75,
-    70,
-    70
-  );
-
-  /* obstacles[0] = new Obstacle(
-    "RECT",
-    0,
-    windowHeight * 0.65,
-    windowWidth - 400,
-    35
-  );
-  obstacles[1] = new Obstacle(
-    "RECT",
-    0 + 400,
-    windowHeight * 0.35,
-    windowWidth - 400,
-    35
-  ); */
 }
