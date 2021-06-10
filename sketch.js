@@ -42,12 +42,12 @@ function setup() {
   population = new Population();
   alive = population.size;
   setupInfos();
-  target = createVector(windowWidth / 2, windowHeight * 0.1);
+  target = new Target(windowWidth / 2, windowHeight * 0.1, targetSize);
 }
 
 function draw() {
   background(55);
-  renderTarget();
+  target.render();
   renderInfos();
 
   //_________GAME MODE__________
@@ -77,6 +77,7 @@ function draw() {
   //_________EDIT MODE__________
   if (editMode) {
     checkOverObstacle();
+    target.checkMouseOver();
     for (var i = 0; i < tempArr.length; i++) {
       tempArr[i].render();
       if (mouseIsPressed && tempArr[i].rezisable && resizeMode) {
@@ -237,14 +238,4 @@ function renderInfos() {
     playBtn.innerHTML = "PLAY";
     playBtn.style.background = "green";
   }
-}
-
-function renderTarget() {
-  fill("#4c4cff");
-  noStroke();
-  ellipse(target.x, target.y, targetSize, targetSize);
-  fill("#FF4C4C");
-  ellipse(target.x, target.y, 45, 45);
-  fill("#FFFF7F");
-  ellipse(target.x, target.y, 25, 25);
 }
