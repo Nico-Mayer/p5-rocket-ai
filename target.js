@@ -3,6 +3,7 @@ function Target(x, y, size) {
   this.y = y;
   this.size = size;
   this.mouseOver = false;
+  this.dragabele = false;
 
   this.render = function () {
     push();

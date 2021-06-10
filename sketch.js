@@ -90,10 +90,13 @@ function draw() {
         tempArr[i].y = mouseY - yOffset;
       }
     }
+    if (mouseIsPressed && target.dragabele && editPosMode) {
+      target.x = mouseX;
+      target.y = mouseY;
+    }
   }
 }
 
-//_______________________EDIT MODE TEST AREA_______________________
 function keyPressed() {
   if (keyCode == 82) {
     resizeMode = true;
@@ -131,6 +134,9 @@ function mousePressed() {
       yOffset = mouseY - tempArr[i].y;
     }
   }
+  if (target.mouseOver) {
+    target.dragabele = true;
+  }
 }
 
 function mouseReleased() {
@@ -138,6 +144,7 @@ function mouseReleased() {
     tempArr[i].rezisable = false;
     tempArr[i].dragabele = false;
   }
+  target.dragabele = false;
 }
 
 function checkOverObstacle() {
