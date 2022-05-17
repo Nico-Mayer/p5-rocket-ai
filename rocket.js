@@ -1,5 +1,5 @@
 function Rocket(dna) {
-  this.position = createVector(windowWidth / 2, windowHeight - 20);
+  this.position = createVector(800 / 2, 900 - 20);
   this.vel = createVector();
   this.acc = createVector();
   this.wayIsClear = false;
@@ -116,9 +116,9 @@ function Rocket(dna) {
     // Check for Wall Crash
     if (
       this.position.x < 0 ||
-      this.position.x > windowWidth ||
+      this.position.x > 800 ||
       this.position.y < 0 ||
-      this.position.y > windowHeight
+      this.position.y > 900
     ) {
       this.crashed = true;
     }

@@ -3,7 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              secondary: "#04aa6d",
+            },
+          },
+        },
+      };
+    </script>
     <title>Sketch</title>
 
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -12,24 +23,98 @@
     <script src="libraries/p5.sound.min.js"></script>
   </head>
 
-  <body>
-    <div class="editModeCaption blinking" id="editModeCaption">EDIT MODE</div>
-    <div class="stats">
+  <body class="text-white">
+    <div class="fixed h-screen w-full bg-[#2b3539] z-[-10]"></div>
+    <div class="hero-grid fixed h-screen w-full opacity-40 z-[-10]"></div>
+
+    <div class="flex justify-center">
+      <div class="flex flex-col w-[1056px]">
+        <!-- NAVBAR -->
+        <div
+          class="z-10 flex w-full h-12 select-none items-center py-9 text-xl font-semibold font-mono mb-10 px-2"
+        >
+          <span>Smart </span>
+          <span class="text-secondary">Rockets</span>
+        </div>
+
+        <div class="flex">
+          <!-- SIDEPANEL -->
+
+          <div class="font-mono border-r w-64 border-gray-500 undragable">
+            <div class="space-y-4">
+              <div
+                class="cursor-pointer m-2 pl-2 border-l-8 border-red-400 text-red-400 transition-all duration-125"
+                id="playBtn"
+              >
+                Pause
+              </div>
+              <div
+                class="text-white cursor-pointer m-2 pl-2 border-l-4 hover:border-yellow-300 transition-all duration-125"
+                id="editBtn"
+              >
+                Edit Mode
+              </div>
+              <div
+                class="text-white cursor-pointer m-2 pl-2 border-l-8 border-secondary hover:border-secondary transition-all duration-125"
+                id="trailBtn"
+              >
+                Show Trails
+              </div>
+              <div
+                class="text-white cursor-pointer m-2 pl-2 border-l-4 hover:border-secondary transition-all duration-125"
+                id="distanceBtn"
+              >
+                Show Distance
+              </div>
+            </div>
+
+            <div class="h-6"></div>
+            <div class="flex flex-col space-y-4">
+              <div class="text-white p-2 h-10 flex flex-col space-y-2">
+                <label class="w-32 flex justify-between">
+                  <span>Lifespan</span>
+                  <span id="lifespanValue">800</span>
+                </label>
+                <input
+                  min="100"
+                  max="1000"
+                  value="800"
+                  class="w-32 slider"
+                  type="range"
+                  id="lifespanSlider"
+                />
+              </div>
+              <div class="text-white p-2 h-10 flex flex-col space-y-2">
+                <label class="w-32 flex justify-between">
+                  <span>Population </span>
+                  <span id="populationValue">60</span>
+                </label>
+                <input
+                  min="20"
+                  max="500"
+                  value="60"
+                  class="w-32 slider"
+                  type="range"
+                  id="populationSlider"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- SKETCH -->
+
+          <div class="flex" id="container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="h-24 w-full">
       <span id="generationTracker">Gen</span>
       <span id="avgFitnessTracker">avgfitness</span>
       <span id="aliveTracker">alive</span>
       <span id="crashedTracker">crashed</span>
       <span id="livespanTracker">lifespan</span>
-    </div>
-    <div class="container">
-      <div class="tabs"></div>
-      <div class="menuBtnContainer">
-        <div class="menuBtn" id="distanceBtn">Show Distance</div>
-        <div class="menuBtn" id="trailBtn">Show Trails</div>
-        <div class="menuBtn" id="editBtn">Edit Mode</div>
-        <div class="menuBtn" id="playBtn">Play</div>
-      </div>
-    </div>
+    </div> -->
 
     <script src="target.js"></script>
     <script src="obstacles.js"></script>

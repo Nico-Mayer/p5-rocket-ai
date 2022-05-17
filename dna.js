@@ -55,7 +55,7 @@ function DNA(genes, red, green, blue, redTrail, greenTrail, blueTrail) {
     } else {
       this.mutationRate = 0.003;
     }
-    if (generation != 0 && generation % 3 == 0) {
+    if (generation != 0 /* && generation % 3 == 0 */) {
       this.mutationRate += 0.035;
       this.highMutateGen = true;
     }

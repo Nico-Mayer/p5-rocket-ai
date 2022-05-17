@@ -10,6 +10,8 @@ let crashed = 0;
 let editMode = false;
 let simulating = true;
 let finished = false;
+let canWidth = 800;
+let canHeight = 900;
 
 //Edit Mode vars
 let overBox = false;
@@ -29,26 +31,32 @@ let distanceBtn = document.getElementById("distanceBtn");
 let trailBtn = document.getElementById("trailBtn");
 let editBtn = document.getElementById("editBtn");
 let playBtn = document.getElementById("playBtn");
+let populationSlider = document.getElementById("populationSlider");
+let populationValue = document.getElementById("populationValue");
+let lifespanSlider = document.getElementById("lifespanSlider");
+let lifespanValue = document.getElementById("lifespanValue");
 
 let traget;
 let obstacles;
 let showDistance = false;
-let showTrail = false;
+let showTrail = true;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const canvas = createCanvas(canWidth, canHeight);
+  canvas.parent("container");
   obstacles = [];
-  createObstacles();
+  createObstacles(canWidth, canHeight);
   population = new Population();
   alive = population.size;
   setupInfos();
-  target = new Target(windowWidth / 2, windowHeight * 0.1, targetSize);
+  target = new Target(canWidth / 2, canHeight * 0.1, targetSize);
 }
 
 function draw() {
-  background(55);
+  clear();
+  background(0, 100);
   target.render();
-  renderInfos();
+  //renderInfos();
 
   //_________GAME MODE__________
   if (!editMode) {
@@ -81,8 +89,8 @@ function draw() {
     for (var i = 0; i < tempArr.length; i++) {
       tempArr[i].render();
       if (mouseIsPressed && tempArr[i].rezisable && resizeMode) {
-        tempArr[i].width = constrain(mouseX - tempArr[i].x, 20, windowWidth);
-        tempArr[i].height = constrain(mouseY - tempArr[i].y, 20, windowHeight);
+        tempArr[i].width = constrain(mouseX - tempArr[i].x, 20, canWidth);
+        tempArr[i].height = constrain(mouseY - tempArr[i].y, 20, canHeight);
       }
 
       if (mouseIsPressed && tempArr[i].dragabele && editPosMode) {
@@ -169,44 +177,78 @@ function setupInfos() {
   //Buttons
   distanceBtn.onclick = function () {
     showDistance = !showDistance;
+    distanceBtn.classList.toggle("border-secondary");
+    distanceBtn.classList.toggle("border-l-8");
+    distanceBtn.classList.toggle("border-l-4");
   };
   trailBtn.onclick = function () {
+    trailBtn.classList.toggle("border-l-8");
+    trailBtn.classList.toggle("border-l-4");
+    trailBtn.classList.toggle("border-white");
+
     showTrail = !showTrail;
   };
+
   editBtn.onclick = function () {
+    playBtn.classList.toggle("inactive");
+    trailBtn.classList.toggle("inactive");
+    distanceBtn.classList.toggle("inactive");
+
+    editBtn.classList.toggle("border-yellow-300");
+    editBtn.classList.toggle("text-yellow-300");
+    editBtn.classList.toggle("animate-pulse");
+    editBtn.classList.toggle("border-l-4");
+    editBtn.classList.toggle("border-l-8");
+
     if (!editMode) {
-      document.getElementById("editModeCaption").style.visibility = "visible";
       tempArr = [...obstacles];
       obstacles = [];
     } else if (editMode) {
-      document.getElementById("editModeCaption").style.visibility = "hidden";
       obstacles = [...tempArr];
       tempArr = [];
     }
 
     editMode = !editMode;
     simulating = !simulating;
-    population = new Population();
-    generation = 0;
-    count = 0;
-    alive = population.size;
-    crashed = 0;
-    completed = 0;
-    clear();
+    defaultValues();
   };
   playBtn.onclick = function () {
-    simulating = !simulating;
-    if (editMode) {
-      obstacles = [...tempArr];
-      tempArr = [];
-      editMode = false;
-      simulating = true;
+    if (simulating) {
+      playBtn.innerHTML = "Start";
+    } else {
+      playBtn.innerHTML = "Stop";
     }
-    clear();
+    playBtn.classList.toggle("border-secondary");
+    playBtn.classList.toggle("text-red-400");
+    playBtn.classList.toggle("text-secondary");
+
+    playBtn.classList.toggle("border-l-8");
+    playBtn.classList.toggle("border-l-4");
+
+    simulating = !simulating;
+    defaultValues();
+  };
+
+  populationSlider.oninput = function () {
+    populationValue.innerHTML = populationSlider.value;
+  };
+
+  lifespanSlider.oninput = function () {
+    lifespanValue.innerHTML = lifespanSlider.value;
   };
 }
 
-function renderInfos() {
+function defaultValues() {
+  population = new Population();
+  generation = 0;
+  count = 0;
+  alive = population.size;
+  crashed = 0;
+  completed = 0;
+  clear();
+}
+
+/* function renderInfos() {
   if (completed > 0) {
     multiplier = 20000;
   }
@@ -245,4 +287,4 @@ function renderInfos() {
     playBtn.innerHTML = "PLAY";
     playBtn.style.background = "green";
   }
-}
+} */
