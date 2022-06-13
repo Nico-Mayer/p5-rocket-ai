@@ -214,9 +214,9 @@ function setupInfos() {
   };
   playBtn.onclick = function () {
     if (simulating) {
-      playBtn.innerHTML = "Start";
+      playBtn.innerHTML = "START";
     } else {
-      playBtn.innerHTML = "Stop";
+      playBtn.innerHTML = "STOP";
     }
     playBtn.classList.toggle("border-secondary");
     playBtn.classList.toggle("text-red-400");
@@ -234,6 +234,8 @@ function setupInfos() {
   };
 
   lifespanSlider.oninput = function () {
+    this.lifespan = lifespanSlider.value;
+    console.log(this.lifespan);
     lifespanValue.innerHTML = lifespanSlider.value;
   };
 }
