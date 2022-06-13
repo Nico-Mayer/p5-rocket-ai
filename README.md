@@ -5,9 +5,6 @@ The Idea is that a set of rockets try to reach a Target which the user can set.
 
 The Rockets are using a genetic Algorithm to get smarter witch each generation and find the shortest way to their target.
 
-Known Bugs:
-The Edit mode is not fully developed yet so there might be bugs if u Try to edit your Stage.
-
 Explanation:
 The Best Rockets from the previous generation Survive and pass their "Genes" to their child rockets in the next generation.
 These "Genes" are the Vector Direction in which the rocket moved and are Visualized by the Head of the rocket and the Tail of the rocket.
