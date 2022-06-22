@@ -15,3 +15,5 @@ Tail Color = Parent 2
 So you can track which rockets pass their "Genes" the most.
 
 If the Rocket is blinking this Means that it is Mutated and differs a lot from its Parents.
+
+### The Project is not jet finisehd, but you can see the current Status on [P5 Rockerts](https://p5rockets.nimawg.ddnss.de/)
